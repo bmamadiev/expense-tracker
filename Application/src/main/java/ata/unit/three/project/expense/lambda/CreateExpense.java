@@ -38,7 +38,7 @@ public class CreateExpense implements RequestHandler<APIGatewayProxyRequestEvent
         expenseService.createExpense(expense);
 
         return response
-                .withStatusCode(204);
+                .withStatusCode(200);
 
     }
 }

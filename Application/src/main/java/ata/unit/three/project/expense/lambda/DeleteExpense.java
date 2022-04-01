@@ -1,5 +1,7 @@
 package ata.unit.three.project.expense.lambda;
 
+import ata.unit.three.project.App;
+import ata.unit.three.project.expense.service.ExpenseService;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
@@ -27,6 +29,8 @@ public class DeleteExpense implements RequestHandler<APIGatewayProxyRequestEvent
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
 
         // Your Code Here
+        ExpenseService expenseService = App.expenseService();
+        expenseService.deleteExpense(expenseId);
 
         return response
                 .withStatusCode(200);

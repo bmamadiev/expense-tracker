@@ -1,5 +1,8 @@
 package ata.unit.three.project.expense.lambda;
 
+import ata.unit.three.project.App;
+import ata.unit.three.project.expense.lambda.models.Expense;
+import ata.unit.three.project.expense.service.ExpenseService;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
@@ -27,6 +30,10 @@ public class UpdateExpense implements RequestHandler<APIGatewayProxyRequestEvent
         String expenseId = input.getPathParameters().get("expenseId");
 
         // Your Code Here
+        ExpenseService expenseService = App.expenseService();
+        Expense updateExpense = gson.fromJson(input.getBody(), Expense.class);
+
+        expenseService.updateExpense(expenseId, updateExpense);
 
         return response
                 .withStatusCode(200);
