@@ -35,10 +35,12 @@ public class CreateExpense implements RequestHandler<APIGatewayProxyRequestEvent
         // Your Code Here
 
         Expense expense = gson.fromJson(input.getBody(), Expense.class);
-        expenseService.createExpense(expense);
+
+        String newExpense = expenseService.createExpense(expense);
+//        String jsonExpense = gson.toJson(newExpense);
 
         return response
-                .withStatusCode(200);
-
+                .withStatusCode(200)
+                .withBody(newExpense);
     }
 }
