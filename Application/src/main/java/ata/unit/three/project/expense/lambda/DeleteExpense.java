@@ -33,6 +33,7 @@ public class DeleteExpense implements RequestHandler<APIGatewayProxyRequestEvent
         expenseService.deleteExpense(expenseId);
 
         return response
-                .withStatusCode(200);
+                .withStatusCode(204)
+                .withBody(expenseId);
     }
 }

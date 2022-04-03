@@ -35,7 +35,9 @@ public class UpdateExpense implements RequestHandler<APIGatewayProxyRequestEvent
 
         expenseService.updateExpense(expenseId, updateExpense);
 
+
         return response
-                .withStatusCode(200);
+                .withStatusCode(204)
+                .withBody(updateExpense.toString());
     }
 }

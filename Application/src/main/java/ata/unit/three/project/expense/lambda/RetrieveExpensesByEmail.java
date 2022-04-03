@@ -1,5 +1,8 @@
 package ata.unit.three.project.expense.lambda;
 
+import ata.unit.three.project.App;
+import ata.unit.three.project.expense.service.ExpenseService;
+import ata.unit.three.project.expense.service.exceptions.InvalidDataException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
@@ -36,8 +39,16 @@ public class RetrieveExpensesByEmail
         String email = input.getQueryStringParameters().get("email");
 
         // Your Code Here
-
-        return response
-                .withStatusCode(200);
+        ExpenseService expenseService = App.expenseService();
+        try {
+            String output = gson.toJson(expenseService.getExpensesByEmail(email));
+            return response
+                    .withStatusCode(200)
+                    .withBody(output);
+        } catch (InvalidDataException e) {
+            return response
+                    .withStatusCode(400)
+                    .withBody(gson.toJson(e.errorPayload()));
+        }
     }
 }
