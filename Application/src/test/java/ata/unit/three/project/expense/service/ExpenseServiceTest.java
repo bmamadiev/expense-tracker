@@ -318,11 +318,45 @@ class ExpenseServiceTest {
     }
 
     /** ------------------------------------------------------------------------
+     *  expenseService.createExpense
+     *  ------------------------------------------------------------------------ **/
+
+    // Write additional tests here
+    @Test
+    void create_expense () {
+        //GIVEN
+        ExpenseServiceRepository expenseServiceRepository = mock(ExpenseServiceRepository.class);
+        ExpenseItemConverter expenseItemConverter = mock(ExpenseItemConverter.class);
+        ExpenseService expenseService = new ExpenseService(expenseServiceRepository, expenseItemConverter);
+
+        ExpenseItem expenseItem = new ExpenseItem();
+        String id = UUID.randomUUID().toString();
+        String email = mockNeat.emails().val();
+        String title = mockNeat.strings().val();
+        Double amount = mockNeat.doubles().range(100, 1000).val();
+        String date = Instant.now().toString();
+        expenseItem.setId(id);
+        expenseItem.setEmail(email);
+        expenseItem.setExpenseDate(date);
+        expenseItem.setTitle(title);
+        expenseItem.setAmount(amount);
+
+        //WHEN
+        Expense expense = new Expense(expenseItem.getEmail(), expenseItem.getTitle(), expenseItem.getAmount());
+        expenseService.createExpense(expense);
+
+        //THEN
+
+//        Assertions.assertEquals(email, expense.getEmail());
+//        Assertions.assertEquals(title, expense.getTitle());
+//        Assertions.assertEquals(amount, expense.getAmount());
+    }
+
+    /** ------------------------------------------------------------------------
      *  expenseService.addExpenseItemToList
      *  ------------------------------------------------------------------------ **/
 
     // Write additional tests here
-
 
     /** ------------------------------------------------------------------------
      *  expenseService.removeExpenseItemFromList

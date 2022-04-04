@@ -19,6 +19,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.UUID.fromString;
+
 @ExcludeFromJacocoGeneratedReport
 public class RetrieveExpense implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
@@ -46,6 +48,9 @@ public class RetrieveExpense implements RequestHandler<APIGatewayProxyRequestEve
             if (expense == null) {
                 return response
                         .withStatusCode(404);
+            } else if (isInvalidUuid(expense.getId())) {
+                return response
+                        .withStatusCode(400);
             }
             String output = gson.toJson(expense);
 
@@ -58,5 +63,14 @@ public class RetrieveExpense implements RequestHandler<APIGatewayProxyRequestEve
                     .withStatusCode(400)
                     .withBody(gson.toJson(e.errorPayload()));
         }
+    }
+
+    private boolean isInvalidUuid(String uuid) {
+        try {
+            fromString(uuid);
+        } catch (IllegalArgumentException exception) {
+            return true;
+        }
+        return false;
     }
 }

@@ -5,6 +5,7 @@ import ata.unit.three.project.expense.lambda.models.Expense;
 import ata.unit.three.project.expense.service.ExpenseService;
 import ata.unit.three.project.expense.service.ExpenseServiceComponent;
 
+import ata.unit.three.project.expense.service.exceptions.InvalidDataException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
@@ -36,11 +37,21 @@ public class CreateExpense implements RequestHandler<APIGatewayProxyRequestEvent
 
         Expense expense = gson.fromJson(input.getBody(), Expense.class);
 
-        String newExpense = expenseService.createExpense(expense);
-//        String jsonExpense = gson.toJson(newExpense);
+        try {
+            String newExpense = expenseService.createExpense(expense);
 
-        return response
-                .withStatusCode(200)
-                .withBody(newExpense);
+            if (expense.getAmount().isNaN()) {
+                return response
+                        .withStatusCode(400);
+            }
+
+            return response
+                    .withStatusCode(200)
+                    .withBody(newExpense);
+        } catch (InvalidDataException e) {
+            return response
+                    .withStatusCode(400)
+                    .withBody(gson.toJson(e.errorPayload()));
+        }
     }
 }

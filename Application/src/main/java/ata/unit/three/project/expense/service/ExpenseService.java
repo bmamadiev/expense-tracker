@@ -45,6 +45,9 @@ public class ExpenseService {
     public String createExpense(Expense expense) {
         ExpenseItem expenseItem = expenseItemConverter.convert(expense);
         expenseServiceRepository.createExpense(expenseItem);
+        if (expense.getAmount() == null) {
+            throw new InvalidDataException("Amount is invalid");
+        }
         return expenseItem.getId();
     }
 

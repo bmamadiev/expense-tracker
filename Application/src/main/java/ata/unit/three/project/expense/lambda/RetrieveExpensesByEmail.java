@@ -10,6 +10,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kenzie.ata.ExcludeFromJacocoGeneratedReport;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,6 +43,10 @@ public class RetrieveExpensesByEmail
         ExpenseService expenseService = App.expenseService();
         try {
             String output = gson.toJson(expenseService.getExpensesByEmail(email));
+            if (StringUtils.isEmpty(email)) {
+                return response
+                        .withStatusCode(400);
+            }
             return response
                     .withStatusCode(200)
                     .withBody(output);
