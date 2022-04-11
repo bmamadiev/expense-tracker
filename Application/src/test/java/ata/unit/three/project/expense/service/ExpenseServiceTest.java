@@ -10,6 +10,7 @@ import ata.unit.three.project.expense.service.model.ExpenseItemConverter;
 import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -20,8 +21,8 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.doubleThat;
+import static org.mockito.Mockito.*;
 
 class ExpenseServiceTest {
 
@@ -325,31 +326,48 @@ class ExpenseServiceTest {
     @Test
     void create_expense () {
         //GIVEN
+        ExpenseService expenseService = mock(ExpenseService.class);
+        Expense expense;
+
+        ExpenseItem expenseItem = mock(ExpenseItem.class);
+        String id = UUID.randomUUID().toString();
+        expenseItem.setId(id);
+        expenseItem.setEmail(mockNeat.emails().val());
+        expenseItem.setExpenseDate(Instant.now().toString());
+        expenseItem.setTitle(mockNeat.strings().val());
+        expenseItem.setAmount(mockNeat.doubles().val());
+
+        expense = new Expense(expenseItem.getEmail(), expenseItem.getTitle(), expenseItem.getAmount());
+
+        when(expenseItem.getId()).thenReturn(id);
+
+        when(expenseService.createExpense(expense)).thenReturn(id);
+
+        expenseService.createExpense(expense);
+        verify(expenseService).createExpense(expense);
+    }
+    @Test
+    void create_expense_throws_exception () {
+        //GIVEN
+
         ExpenseServiceRepository expenseServiceRepository = mock(ExpenseServiceRepository.class);
         ExpenseItemConverter expenseItemConverter = mock(ExpenseItemConverter.class);
         ExpenseService expenseService = new ExpenseService(expenseServiceRepository, expenseItemConverter);
 
-        ExpenseItem expenseItem = new ExpenseItem();
+        ExpenseItem expenseItem = mock(ExpenseItem.class);
         String id = UUID.randomUUID().toString();
-        String email = mockNeat.emails().val();
-        String title = mockNeat.strings().val();
-        Double amount = mockNeat.doubles().range(100, 1000).val();
-        String date = Instant.now().toString();
         expenseItem.setId(id);
-        expenseItem.setEmail(email);
-        expenseItem.setExpenseDate(date);
-        expenseItem.setTitle(title);
-        expenseItem.setAmount(amount);
+        expenseItem.setEmail(mockNeat.emails().val());
+        expenseItem.setExpenseDate(Instant.now().toString());
+        expenseItem.setTitle(mockNeat.strings().val());
+        expenseItem.setAmount(null);
 
-        //WHEN
+        when(expenseItem.getAmount()).thenReturn(null);
+
         Expense expense = new Expense(expenseItem.getEmail(), expenseItem.getTitle(), expenseItem.getAmount());
-        expenseService.createExpense(expense);
 
-        //THEN
-
-//        Assertions.assertEquals(email, expense.getEmail());
-//        Assertions.assertEquals(title, expense.getTitle());
-//        Assertions.assertEquals(amount, expense.getAmount());
+        assertThrows(InvalidDataException.class, () -> expenseService.createExpense(expense));
+        verify(expenseItem).getAmount();
     }
 
     /** ------------------------------------------------------------------------

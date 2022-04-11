@@ -1,5 +1,10 @@
 package ata.unit.three.project.expense.lambda;
 
+import ata.unit.three.project.expense.lambda.models.Expense;
+import ata.unit.three.project.expense.lambda.models.ExpenseList;
+import ata.unit.three.project.expense.service.DaggerExpenseServiceComponent;
+import ata.unit.three.project.expense.service.ExpenseService;
+import ata.unit.three.project.expense.service.ExpenseServiceComponent;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
@@ -22,11 +27,20 @@ public class AddExpenseItemToList implements RequestHandler<APIGatewayProxyReque
         // Logging the request json to make debugging easier.
         log.info(gson.toJson(input));
 
+        // Your Code Here...
+        ExpenseServiceComponent dagger = DaggerExpenseServiceComponent.create();
+        ExpenseService expenseService = dagger.expenseService();
+
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
 
-        // Your Code Here...
+        ExpenseList expenseList = gson.fromJson(input.getBody(), ExpenseList.class);
+        Expense expense = gson.fromJson(input.getBody(), Expense.class);
+        String expenseId = input.getPathParameters().get("expenseId");
+        String id = input.getQueryStringParameters().get("id");
+
+        expenseService.addExpenseItemToList(id, expenseId);
 
         return response
-                .withStatusCode(200);
+                .withStatusCode(204);
     }
 }

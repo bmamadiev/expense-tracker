@@ -79,6 +79,8 @@ public class ExpenseService {
 
     public void addExpenseItemToList(String id, String expenseId) {
         // Your Code Here
+        ExpenseItem item = expenseServiceRepository.getExpenseById(expenseId);
+        expenseServiceRepository.addExpenseItemToList(id, item);
     }
 
     public void removeExpenseItemFromList(String id, String expenseId) {

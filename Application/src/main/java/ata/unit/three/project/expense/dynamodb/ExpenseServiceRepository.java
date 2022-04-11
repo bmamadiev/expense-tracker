@@ -19,7 +19,7 @@ public class ExpenseServiceRepository {
 
     AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
     DynamoDBMapper mapper = new DynamoDBMapper(client);
-
+    //@Inject
     public ExpenseServiceRepository() {
         if (!ExpenseTable.doesExpenseTableExist(EXPENSE_TABLE_NAME)) {
             ExpenseTable.createExpenseTable();
@@ -76,7 +76,9 @@ public class ExpenseServiceRepository {
         if (list.getExpenseItems() == null) {
             list.setExpenseItems(new LinkedList<>());
         }
-        list.getExpenseItems().add(item);
+        if (item.getEmail().equals(list.getEmail()) || !(list.getExpenseItems().contains(item))) {
+            list.getExpenseItems().add(item);
+        }
         mapper.save(list);
     }
 

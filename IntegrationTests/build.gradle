@@ -57,7 +57,7 @@ def wflowToTestsMap = [
         'expensetracking-integration-task4': [
                 'ata.unit.three.project.integration.CreateExpenseListTest',
                 'ata.unit.three.project.integration.AddItemToExpenseListTest',
-                'ata.unit.three.project.integration.RemovedItemFromExpenseListTest',
+                'ata.unit.three.project.integration.RemoveItemFromExpenseListTest',
         ],
         'expensetracking-integration-task5': [
                 'ata.unit.three.project.integration.RetrieveExpenseListByEmailTest',
