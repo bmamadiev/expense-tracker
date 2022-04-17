@@ -1,6 +1,7 @@
 package ata.unit.three.project.expense.lambda;
 
 import ata.unit.three.project.App;
+import ata.unit.three.project.expense.dynamodb.ExpenseItemList;
 import ata.unit.three.project.expense.service.DaggerExpenseServiceComponent;
 import ata.unit.three.project.expense.service.ExpenseService;
 import ata.unit.three.project.expense.service.exceptions.InvalidDataException;
@@ -16,8 +17,7 @@ import com.kenzie.ata.ExcludeFromJacocoGeneratedReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @ExcludeFromJacocoGeneratedReport
 public class RetrieveExpenseListsByEmail
@@ -49,6 +49,9 @@ public class RetrieveExpenseListsByEmail
 
         try {
             String output = gson.toJson(expenseService.getExpenseListByEmail(email));
+//            List<ExpenseItemList> expenseItemList = expenseService.getExpenseListByEmail(email);
+//            Collections.sort(expenseItemList);
+
             return response
                     .withStatusCode(200)
                     .withBody(output);
@@ -57,5 +60,9 @@ public class RetrieveExpenseListsByEmail
                     .withStatusCode(400)
                     .withBody(gson.toJson(e.errorPayload()));
         }
+
+
     }
 }
+
+

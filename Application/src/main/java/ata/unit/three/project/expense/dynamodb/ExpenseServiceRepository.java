@@ -76,9 +76,7 @@ public class ExpenseServiceRepository {
         if (list.getExpenseItems() == null) {
             list.setExpenseItems(new LinkedList<>());
         }
-        if (item.getEmail().equals(list.getEmail()) || !(list.getExpenseItems().contains(item))) {
-            list.getExpenseItems().add(item);
-        }
+        list.getExpenseItems().add(item);
         mapper.save(list);
     }
 
