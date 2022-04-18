@@ -10,6 +10,7 @@ import ata.unit.three.project.expense.service.model.ExpenseItemConverter;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -147,8 +148,14 @@ public class ExpenseService {
         if (StringUtils.isEmpty(email)) {
             throw new InvalidDataException("Email is not present");
         }
+        List <ExpenseItemList> expenseItemList = expenseServiceRepository.getExpenseListsByEmail(email);
 
-        return expenseServiceRepository.getExpenseListsByEmail(email);
+        for (ExpenseItemList itemList : expenseItemList) {
+            if (itemList.getExpenseItems() != null && itemList.getExpenseItems().size() > 0) {
+                Collections.sort(itemList.getExpenseItems(), new SortItems().reversed());
+            }
+        }
+        return expenseItemList;
     }
 
     private boolean isInvalidUuid(String uuid) {

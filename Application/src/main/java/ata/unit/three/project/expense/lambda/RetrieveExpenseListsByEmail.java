@@ -49,8 +49,6 @@ public class RetrieveExpenseListsByEmail
 
         try {
             String output = gson.toJson(expenseService.getExpenseListByEmail(email));
-//            List<ExpenseItemList> expenseItemList = expenseService.getExpenseListByEmail(email);
-//            Collections.sort(expenseItemList);
 
             return response
                     .withStatusCode(200)
