@@ -10,18 +10,13 @@ import ata.unit.three.project.expense.service.model.ExpenseItemConverter;
 import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.doubleThat;
 import static org.mockito.Mockito.*;
 
 class ExpenseServiceTest {
@@ -830,6 +825,8 @@ class ExpenseServiceTest {
         assertEquals(returnedExpenseList.size(), 1);
         assertEquals(returnedExpenseList.get(0).getId(), expenseListId);
         assertEquals(returnedExpenseList.get(0).getEmail(), email);
+        assertNotNull(expenseItemList.getExpenseItems());
+        assertTrue(expenseItemList.getExpenseItems().size() > 0);
     }
 
     // Write additional tests here
